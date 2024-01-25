@@ -6,18 +6,18 @@ using UnityEngine.AI;
 
 public class ZombieBehaviour : MonoBehaviour
 {
-    [SerializeField] private float walkSpeed, runSpeed, aggroRange, attackRange, attackDamage, attackInterval;
+    [SerializeField] private float walkSpeed, runSpeed, aggroRange, attackRange, 
+        attackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
     
-    private Rigidbody rb;
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
     private NavMeshAgent agent;
+    private Coroutine walkCoroutine;
 
     private GameObject player;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -31,9 +31,23 @@ public class ZombieBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (state == ZombieState.Aggro)
+        switch (state)
         {
-            agent.SetDestination(player.transform.position);
+            case ZombieState.Idle:
+                Idle();
+                break;
+            case ZombieState.Walk:
+                Walk();
+                break;
+            case ZombieState.Aggro:
+                Aggro();
+                break;
+            case ZombieState.Attack:
+                Attack();
+                break;
+            case ZombieState.Dead:
+                Dead();
+                break;
         }
     }
 
@@ -65,6 +79,102 @@ public class ZombieBehaviour : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    private void Idle()
+    {
+        StopAllCoroutines();
+        anim.SetBool("isWalking", false);
+    }
+
+    private void Walk()
+    {
+        anim.SetBool("isWalking", true);
+        if (walkCoroutine == null)
+        {
+            walkCoroutine = StartCoroutine(WalkTimer());
+        }
+    }
+
+    private void Aggro()
+    {
+        StopAllCoroutines();
+        anim.SetBool("isWalking", false);
+        anim.SetBool("isRunning", true);
+        agent.SetDestination(player.transform.position);
+        if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
+        {
+            state = ZombieState.Attack;
+        }
+    }
+
+    private void Attack()
+    {
+        StopAllCoroutines();
+        anim.SetBool("isWalking", false);
+        anim.SetBool("isRunning", false);
+        anim.SetTrigger("Attack");
+        //player.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+        StartCoroutine(AttackCooldown());
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackInterval);
+        state = ZombieState.Aggro;
+    }
+
+    private void Dead()
+    {
+        anim.SetBool("isWalking", false);
+        anim.SetBool("isRunning", false);
+        anim.SetTrigger("Dead");
+        agent.enabled = false;
+        Destroy(gameObject, 5);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (state == ZombieState.Dead) return;
+        state = ZombieState.Aggro;
+        agent.speed = runSpeed;
+        agent.SetDestination(player.transform.position);
+        //if (GetComponent<ZombieHealth>().health <= 0)
+        //{
+        //    Die();
+        //}
+        //GetComponent<ZombieHealth>().TakeDamage(damage);
+        //if (GetComponent<ZombieHealth>().health <= 0)
+        //{
+        //    state = ZombieState.Dead;
+        //}
+    }
+
+    private void Die()
+    {
+        state = ZombieState.Dead;
+    }
+
+    private IEnumerator WalkTimer()
+    {
+        Coroutine coroutine = StartCoroutine(RandomWalk());
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
+            StopCoroutine(coroutine);
+            coroutine = StartCoroutine(RandomWalk());
+        }
+    }
+
+    private IEnumerator RandomWalk()
+    {
+        state = ZombieState.Walk;
+        Vector3 randVec = new Vector3(transform.position.x + Random.Range(-10, 10), 0, transform.position.z + Random.Range(-10, 10));
+        agent.SetDestination(randVec);
+        yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
+        agent.ResetPath();
+        state = ZombieState.Idle;
+        yield return null;
     }
 }
 enum ZombieState
