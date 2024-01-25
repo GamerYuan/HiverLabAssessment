@@ -380,7 +380,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.13
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 3671052abe280c94b93fa543e5fc98a1, type: 2}
   m_BuildHeightMesh: 0
@@ -813,7 +813,7 @@ GameObject:
   - component: {fileID: 1708332339}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -877,7 +877,7 @@ Transform:
   m_GameObject: {fileID: 1708332331}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1105,12 +1105,12 @@ PrefabInstance:
     - target: {fileID: 8200041972435938290, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.84
+      value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 8200041972435938290, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.99
+      value: 74.1
       objectReference: {fileID: 0}
     - target: {fileID: 8200041972435938290, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
