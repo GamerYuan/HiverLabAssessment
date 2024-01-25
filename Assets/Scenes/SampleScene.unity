@@ -1005,6 +1005,7 @@ MonoBehaviour:
   bulletSpawn: {fileID: 1836433836}
   maxSpread: 5
   timeoutPeriod: 2
+  shootInterval: 0.1
 --- !u!1 &1836433835
 GameObject:
   m_ObjectHideFlags: 0

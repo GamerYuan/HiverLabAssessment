@@ -8,10 +8,12 @@ public class PlayerShoot : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
-    [SerializeField] private float maxSpread, timeoutPeriod;
+    [SerializeField] private float maxSpread, timeoutPeriod, shootInterval;
 
     private ObjectPool<GameObject> bulletPool;
-    private float timer = 0f, spread = 0f;
+    private float spreadTimer = 0f, spread = 0f, shootTimer;
+    private bool isShooting = false;
+    private bool canShoot = true;
 
     void Start()
     {
@@ -20,14 +22,35 @@ public class PlayerShoot : MonoBehaviour
 
     void Update()
     {
-        timer = Mathf.Clamp(timer - Time.deltaTime, 0f, timeoutPeriod);
-        spread = maxSpread * (timer / timeoutPeriod);
+        spreadTimer = Mathf.Clamp(spreadTimer - Time.deltaTime, 0f, timeoutPeriod);
+        spread = maxSpread * (spreadTimer / timeoutPeriod);
+
+        if (canShoot && isShooting)
+        {
+            TriggerBullet();
+            canShoot = false;
+            shootTimer = shootInterval;
+        }
+
+        if (canShoot == false)
+        {
+            shootTimer -= Time.deltaTime;
+            if (shootTimer <= 0f)
+            {
+                canShoot = true;
+            }
+        }
+    }
+
+    void TriggerBullet()
+    {
+        spreadTimer = Mathf.Clamp(spreadTimer + 0.2f, 0f, timeoutPeriod);
+        GameObject bullet = bulletPool.Get();
+        bullet.GetComponent<BulletBehaviour>().InitializeBullet(bulletSpawn, bulletPool, spread);
     }
 
     public void Shoot(InputAction.CallbackContext context)
     {
-        timer = Mathf.Clamp(timer + 0.2f, 0f, timeoutPeriod);
-        GameObject bullet = bulletPool.Get();
-        bullet.GetComponent<BulletBehaviour>().InitializeBullet(bulletSpawn, bulletPool, spread);
+        isShooting = context.action.IsPressed();
     }
 }
