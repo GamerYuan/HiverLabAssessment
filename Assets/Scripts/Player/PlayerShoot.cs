@@ -45,8 +45,10 @@ public class PlayerShoot : MonoBehaviour
     void TriggerBullet()
     {
         spreadTimer = Mathf.Clamp(spreadTimer + 0.2f, 0f, timeoutPeriod);
-        GameObject bullet = bulletPool.Get();
-        bullet.GetComponent<BulletBehaviour>().InitializeBullet(bulletSpawn, bulletPool, spread);
+
+
+        //GameObject bullet = bulletPool.Get();
+        //bullet.GetComponent<BulletBehaviour>().InitializeBullet(bulletSpawn, bulletPool, spread);
     }
 
     public void Shoot(InputAction.CallbackContext context)

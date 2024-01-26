@@ -146,7 +146,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 8f7380da49034cd488ddff94b1ac35d1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11
+      value: 13.36
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8f7380da49034cd488ddff94b1ac35d1,
         type: 3}
@@ -925,9 +925,12 @@ MonoBehaviour:
   walkSpeed: 2.5
   runSpeed: 5
   aggroRange: 15
-  attackRange: 0
-  attackDamage: 0
-  attackInterval: 0
+  attackRange: 2
+  attackDamage: 5
+  attackInterval: 3
+  minWalkInterval: 5
+  maxWalkInterval: 10
+  walkRange: 5
 --- !u!135 &2967437523881981702
 SphereCollider:
   m_ObjectHideFlags: 0

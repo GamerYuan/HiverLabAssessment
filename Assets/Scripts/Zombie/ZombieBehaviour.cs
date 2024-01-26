@@ -12,9 +12,8 @@ public class ZombieBehaviour : MonoBehaviour
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
     private NavMeshAgent agent;
-    private Coroutine walkCoroutine;
-
     private GameObject player;
+    private bool isWalking = false, isInSuspiciousRange = false;
 
     void Awake()
     {
@@ -39,6 +38,9 @@ public class ZombieBehaviour : MonoBehaviour
             case ZombieState.Walk:
                 Walk();
                 break;
+            case ZombieState.Suspicious:
+                Suspicious();
+                break;
             case ZombieState.Aggro:
                 Aggro();
                 break;
@@ -58,9 +60,17 @@ public class ZombieBehaviour : MonoBehaviour
             Debug.Log("Player in Range");
             state = ZombieState.Suspicious;
             agent.speed = walkSpeed;
+            isInSuspiciousRange = true;
+            StopAllCoroutines();
+            isWalking = false;
             agent.SetDestination(player.transform.position);
             StartCoroutine(CheckAggro());
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        isInSuspiciousRange = false;
     }
 
     private IEnumerator CheckAggro()
@@ -70,50 +80,78 @@ public class ZombieBehaviour : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1);
-            if (Vector3.Distance(transform.position, player.transform.position) <= aggroRange)
-            {
-                Debug.Log("Player Aggro'd");
-                state = ZombieState.Aggro;
-                agent.speed = runSpeed;
-                agent.SetDestination(player.transform.position);
-                yield return null;
-            }
+            
         }
     }
 
     private void Idle()
     {
-        StopAllCoroutines();
+        Debug.Log("Idle");
         anim.SetBool("isWalking", false);
+        anim.SetBool("isRunning", false);
+        if (!isWalking)
+        {
+            StartCoroutine(WalkTimer());
+            isWalking = true;
+        }
     }
 
     private void Walk()
     {
         anim.SetBool("isWalking", true);
-        if (walkCoroutine == null)
-        {
-            walkCoroutine = StartCoroutine(WalkTimer());
-        }
+        anim.SetBool("isRunning", false);
+        Debug.Log("Walk");
     }
+
+    private void Suspicious()
+    {
+        anim.SetBool("isWalking", true);
+        anim.SetBool("isRunning", false);
+        Debug.Log("Suspicious");
+        //agent.SetDestination(player.transform.position);
+        if (Vector3.Distance(transform.position, player.transform.position) <= aggroRange)
+        {
+            Debug.Log("Player Aggro'd");
+            state = ZombieState.Aggro;
+            agent.speed = runSpeed;
+            agent.SetDestination(player.transform.position);
+        }
+
+        if (agent.remainingDistance < 1)
+        {
+            if (isInSuspiciousRange)
+            {
+                agent.SetDestination(player.transform.position);
+            } else
+            {
+                state = ZombieState.Idle;
+            }
+        }
+    }   
 
     private void Aggro()
     {
         StopAllCoroutines();
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", true);
+        Debug.Log("Aggro");
         agent.SetDestination(player.transform.position);
         if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
         {
             state = ZombieState.Attack;
         }
+        if (Vector3.Distance(transform.position, player.transform.position) > aggroRange)
+        {
+            state = ZombieState.Suspicious;
+        }
     }
 
     private void Attack()
     {
-        StopAllCoroutines();
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", false);
         anim.SetTrigger("Attack");
+        Debug.Log("Attack");
         //player.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
         StartCoroutine(AttackCooldown());
     }
@@ -139,20 +177,25 @@ public class ZombieBehaviour : MonoBehaviour
         state = ZombieState.Aggro;
         agent.speed = runSpeed;
         agent.SetDestination(player.transform.position);
-        //if (GetComponent<ZombieHealth>().health <= 0)
-        //{
-        //    Die();
-        //}
         //GetComponent<ZombieHealth>().TakeDamage(damage);
         //if (GetComponent<ZombieHealth>().health <= 0)
         //{
-        //    state = ZombieState.Dead;
+        //    Die();
         //}
     }
 
     private void Die()
     {
         state = ZombieState.Dead;
+        Debug.Log("Dead");
+        if (Random.Range(0, 1) < 0.5)
+        {
+            anim.SetTrigger("DieFront");
+        } 
+        else
+        {
+            anim.SetTrigger("DieBack");
+        }
     }
 
     private IEnumerator WalkTimer()
@@ -161,8 +204,11 @@ public class ZombieBehaviour : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
-            StopCoroutine(coroutine);
-            coroutine = StartCoroutine(RandomWalk());
+            if (state == ZombieState.Idle)
+            {
+                StopCoroutine(coroutine);
+                coroutine = StartCoroutine(RandomWalk());
+            }
         }
     }
 
