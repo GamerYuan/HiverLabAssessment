@@ -57,7 +57,7 @@ public class ZombieBehaviour : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player in Range");
+            //Debug.Log("Player in Range");
             state = ZombieState.Suspicious;
             agent.speed = walkSpeed;
             isInSuspiciousRange = true;
@@ -86,7 +86,7 @@ public class ZombieBehaviour : MonoBehaviour
 
     private void Idle()
     {
-        Debug.Log("Idle");
+        //Debug.Log("Idle");
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", false);
         if (!isWalking)
@@ -100,18 +100,18 @@ public class ZombieBehaviour : MonoBehaviour
     {
         anim.SetBool("isWalking", true);
         anim.SetBool("isRunning", false);
-        Debug.Log("Walk");
+        //Debug.Log("Walk");
     }
 
     private void Suspicious()
     {
         anim.SetBool("isWalking", true);
         anim.SetBool("isRunning", false);
-        Debug.Log("Suspicious");
+        //Debug.Log("Suspicious");
         //agent.SetDestination(player.transform.position);
         if (Vector3.Distance(transform.position, player.transform.position) <= aggroRange)
         {
-            Debug.Log("Player Aggro'd");
+            //Debug.Log("Player Aggro'd");
             state = ZombieState.Aggro;
             agent.speed = runSpeed;
             agent.SetDestination(player.transform.position);
@@ -134,7 +134,7 @@ public class ZombieBehaviour : MonoBehaviour
         StopAllCoroutines();
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", true);
-        Debug.Log("Aggro");
+        //Debug.Log("Aggro");
         agent.SetDestination(player.transform.position);
         if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
         {
@@ -151,7 +151,7 @@ public class ZombieBehaviour : MonoBehaviour
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", false);
         anim.SetTrigger("Attack");
-        Debug.Log("Attack");
+        //Debug.Log("Attack");
         //player.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
         StartCoroutine(AttackCooldown());
     }
@@ -187,7 +187,7 @@ public class ZombieBehaviour : MonoBehaviour
     private void Die()
     {
         state = ZombieState.Dead;
-        Debug.Log("Dead");
+        //Debug.Log("Dead");
         if (Random.Range(0, 1) < 0.5)
         {
             anim.SetTrigger("DieFront");

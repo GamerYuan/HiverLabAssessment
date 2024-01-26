@@ -1035,9 +1035,12 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2999310076125302956, guid: 0bf4dad84230e8843884a1c6020bdbac,
     type: 3}
   bulletSpawn: {fileID: 1836433836}
-  maxSpread: 5
-  timeoutPeriod: 2
+  maxSpread: 0.2
+  timeoutPeriod: 1
   shootInterval: 0.1
+  zombieLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &1836433835
 GameObject:
   m_ObjectHideFlags: 0
