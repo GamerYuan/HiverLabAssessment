@@ -949,7 +949,7 @@ MonoBehaviour:
   aggroRange: 15
   attackRange: 2
   hitboxRange: 0.75
-  attackDamage: 5
+  attackDamage: 1
   attackInterval: 2
   minWalkInterval: 5
   maxWalkInterval: 10

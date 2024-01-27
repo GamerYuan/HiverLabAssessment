@@ -167,12 +167,11 @@ public class ZombieBehaviour : MonoBehaviour
 
     public void AttackHitbox()
     {
-        Debug.Log("Attack");
         RaycastHit hit;
         if (Physics.SphereCast(transform.position, hitboxRange, transform.forward, out hit, 1, 
             playerLayer, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log(hit.transform);
+            Debug.Log($"{transform} hit {hit.transform}");
             if (hit.transform.root.CompareTag("Player"))
             {
                 PlayerBehaviour.instance.TakeDamage(attackDamage);
