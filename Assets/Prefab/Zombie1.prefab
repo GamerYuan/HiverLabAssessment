@@ -931,7 +931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23082752a616a9a4abc0ab5024f394d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 10
+  initialHealth: 10
 --- !u!114 &-6931301855204352629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -949,7 +949,7 @@ MonoBehaviour:
   aggroRange: 15
   attackRange: 2
   hitboxRange: 0.75
-  attackDamage: 1
+  initialAttackDamage: 1
   attackInterval: 2
   minWalkInterval: 5
   maxWalkInterval: 10
@@ -957,7 +957,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  score: 10
+  initialScore: 10
   OnScoreChange: {fileID: 11400000, guid: cf5cbcb93efb4534b8960755ae4a1378, type: 2}
 --- !u!135 &2967437523881981702
 SphereCollider:

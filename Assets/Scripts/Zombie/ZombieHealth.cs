@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ZombieHealth : MonoBehaviour, IHealth
 {
-    [SerializeField] private float _health;
+    [SerializeField] private float initialHealth;
+
+    private float _health;
 
     public float Health
     {
@@ -16,5 +18,10 @@ public class ZombieHealth : MonoBehaviour, IHealth
     {
         Health -= damage;
         Debug.Log($"{transform} took {damage} damage!");
+    }
+
+    public void ResetHealth(int diffMultiplier)
+    {
+        Health = initialHealth * diffMultiplier;
     }
 }

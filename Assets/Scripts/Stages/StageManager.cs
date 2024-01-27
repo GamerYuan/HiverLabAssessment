@@ -7,6 +7,7 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager instance;
 
+    public bool isStageActive;
     void Awake()
     {
         if (instance == null)
@@ -17,11 +18,13 @@ public class StageManager : MonoBehaviour
         {
             Destroy(this);
         }
+        isStageActive = true;
     }
 
     private void EndStage()
     {
         Debug.Log("Ending stage");
+        isStageActive = false;
         Time.timeScale = 0f;
     }
 

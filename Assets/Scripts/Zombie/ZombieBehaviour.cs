@@ -7,17 +7,19 @@ using UnityEngine.AI;
 public class ZombieBehaviour : MonoBehaviour, IScorable
 {
     [SerializeField] private float walkSpeed, runSpeed, aggroRange, attackRange, hitboxRange,
-        attackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
+        initialAttackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
     [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private int score;
+    [SerializeField] private int initialScore;
     [SerializeField] private GameEvent OnScoreChange;
 
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
     private NavMeshAgent agent;
-    private GameObject player;
+    private Transform player;
     private ZombieHealth zombieHealth;
     private bool isWalking = false, isInSuspiciousRange = false;
+    private float attackDamage;
+    private int score;
 
     void Awake()
     {
@@ -27,10 +29,9 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         agent.speed = walkSpeed;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void OnDisable()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        agent.enabled = false;
     }
 
     // Update is called once per frame
@@ -60,13 +61,13 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
     {
         if (other.CompareTag("Player"))
         {
-            //Debug.Log("Player in Range");
+            Debug.Log($"Zombie ({gameObject.GetInstanceID()}): Player in sus range");
             state = ZombieState.Suspicious;
             agent.speed = walkSpeed;
             isInSuspiciousRange = true;
             StopAllCoroutines();
             isWalking = false;
-            agent.SetDestination(player.transform.position);
+            agent.SetDestination(player.position);
             StartCoroutine(CheckAggro());
         }
     }
@@ -74,6 +75,18 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
     private void OnTriggerExit(Collider other)
     {
         isInSuspiciousRange = false;
+    }
+
+    public void Init(int diffMultiplier, Transform player)
+    {
+        this.player = player;
+        state = ZombieState.Idle;
+        
+        agent.enabled = true;
+        zombieHealth.ResetHealth(diffMultiplier);
+        attackDamage = initialAttackDamage * diffMultiplier;
+        score = initialScore * diffMultiplier;
+        gameObject.SetActive(true);
     }
 
     private IEnumerator CheckAggro()
@@ -89,7 +102,6 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
 
     private void Idle()
     {
-        //Debug.Log("Idle");
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", false);
         anim.SetBool("isIdle", true);
@@ -109,7 +121,6 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         {
             state = ZombieState.Idle;
         }
-        //Debug.Log("Walk");
     }
 
     private void Suspicious()
@@ -117,22 +128,21 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         anim.SetBool("isWalking", true);
         anim.SetBool("isRunning", false);
         anim.SetBool("isIdle", false);
-        //Debug.Log("Suspicious");
-        //agent.SetDestination(player.transform.position);
-        if (Vector3.Distance(transform.position, player.transform.position) <= aggroRange)
+        if (Vector3.Distance(transform.position, player.position) <= aggroRange)
         {
-            //Debug.Log("Player Aggro'd");
+            Debug.Log($"Zombie ({gameObject.GetInstanceID()}): Player in aggro range");
             state = ZombieState.Aggro;
             agent.speed = runSpeed;
-            agent.SetDestination(player.transform.position);
+            agent.SetDestination(player.position);
         }
 
         if (agent.remainingDistance < 1)
         {
             if (isInSuspiciousRange)
             {
-                agent.SetDestination(player.transform.position);
-            } else
+                agent.SetDestination(player.position);
+            } 
+            else
             {
                 state = ZombieState.Idle;
             }
@@ -145,13 +155,12 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", true);
         anim.SetBool("isIdle", false);
-        //Debug.Log("Aggro");
-        agent.SetDestination(player.transform.position);
-        if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
+        agent.SetDestination(player.position);
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             state = ZombieState.Attack;
         }
-        if (Vector3.Distance(transform.position, player.transform.position) > aggroRange)
+        if (Vector3.Distance(transform.position, player.position) > aggroRange)
         {
             state = ZombieState.Suspicious;
         }
@@ -173,7 +182,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         if (Physics.SphereCast(transform.position, hitboxRange, transform.forward, out hit, 1, 
             playerLayer, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log($"{transform} hit {hit.transform}");
+            Debug.Log($"Zombie ({gameObject.GetInstanceID()}): {transform} hit {hit.transform}");
             if (hit.transform.root.CompareTag("Player"))
             {
                 PlayerBehaviour.instance.TakeDamage(attackDamage);
@@ -195,7 +204,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         {
             state = ZombieState.Aggro;
             agent.speed = runSpeed;
-            agent.SetDestination(player.transform.position);
+            agent.SetDestination(player.position);
         }
 
         zombieHealth.TakeDamage(damage);
@@ -212,22 +221,24 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         anim.SetBool("isWalking", false);
         anim.SetBool("isRunning", false);
         anim.SetBool("isIdle", false);
-        Debug.Log("Dead");
+        Debug.Log($"Zombie ({gameObject.GetInstanceID()}): Dead");
         anim.SetFloat("Random", Random.Range(0f, 1f));
         anim.SetTrigger("Die");
         AddScore();
-        Destroy(gameObject, 5);
+        StartCoroutine(DeadTimer());
     }
 
     private IEnumerator WalkTimer()
     {
         Coroutine coroutine = StartCoroutine(RandomWalk());
+
+        // Starts new walk coroutine after random interval
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
             if (state == ZombieState.Idle)
             {
-                Debug.Log("Starts new coroutine");
+                Debug.Log($"Zombie ({gameObject.GetInstanceID()}): Starts new walk coroutine");
                 StopCoroutine(coroutine);
                 coroutine = StartCoroutine(RandomWalk());
             }
@@ -238,13 +249,24 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
     {
         state = ZombieState.Walk;
         anim.SetFloat("Random", Random.Range(0f, 1f));
+        
+        // Generate random point within walk range and set destination
         Vector2 randPoint = Random.insideUnitCircle * walkRange;
         Vector3 randVec = new Vector3(transform.position.x + randPoint.x, 0, transform.position.z + randPoint.y);
         agent.SetDestination(randVec);
+
+        // Resets walk state after random interval
         yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
-        Debug.Log("Reset Path");
+        Debug.Log($"Zombie ({gameObject.GetInstanceID()}): Reset Path");
         agent.ResetPath();
         state = ZombieState.Idle;
+        yield return null;
+    }
+
+    private IEnumerator DeadTimer()
+    {
+        yield return new WaitForSeconds(3);
+        EnemySpawnManager.instance.ReleaseObject(gameObject);
         yield return null;
     }
 
