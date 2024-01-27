@@ -6,21 +6,14 @@ using UnityEngine.Pool;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
-    [SerializeField] private float maxSpread, timeoutPeriod, shootInterval;
+    [SerializeField] private float maxSpread, timeoutPeriod, shootInterval, damage;
     [SerializeField] private LayerMask zombieLayer;
     [SerializeField] private GameEvent onBulletSpread;
 
-    private ObjectPool<GameObject> bulletPool;
     private float spreadTimer = 0f, spread = 0f, shootTimer;
     private bool isShooting = false;
     private bool canShoot = true;
-
-    void Start()
-    {
-        bulletPool = new ObjectPool<GameObject>(() => Instantiate(bulletPrefab));
-    }
 
     void Update()
     {
@@ -64,14 +57,13 @@ public class PlayerShoot : MonoBehaviour
         if (Physics.Raycast(bulletPoint, bulletSpawn.transform.forward, out hit, 30, Physics.DefaultRaycastLayers, 
             QueryTriggerInteraction.Ignore))
         {
-            Debug.Log(hit.point);
-            Debug.Log("Shoot");
+            Debug.Log(hit.collider.gameObject);
             
             // Checks for zombie
             if (hit.transform.root.CompareTag("Zombie"))
             {
                 Debug.Log("Zombie hit");                
-                //hit.transform.root.GetComponent<ZombieBehaviour>().TakeDamage(1);
+                hit.transform.root.GetComponent<ZombieBehaviour>().TakeDamage(damage);
             }
         }
     }
