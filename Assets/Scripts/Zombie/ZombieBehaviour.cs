@@ -4,12 +4,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ZombieBehaviour : MonoBehaviour
+public class ZombieBehaviour : MonoBehaviour, IScorable
 {
     [SerializeField] private float walkSpeed, runSpeed, aggroRange, attackRange, hitboxRange,
         attackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
     [SerializeField] private LayerMask playerLayer;
-    
+    [SerializeField] private int score;
+    [SerializeField] private GameEvent OnScoreChange;
+
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
     private NavMeshAgent agent;
@@ -213,6 +215,7 @@ public class ZombieBehaviour : MonoBehaviour
         Debug.Log("Dead");
         anim.SetFloat("Random", Random.Range(0f, 1f));
         anim.SetTrigger("Die");
+        AddScore();
         Destroy(gameObject, 5);
     }
 
@@ -243,6 +246,11 @@ public class ZombieBehaviour : MonoBehaviour
         agent.ResetPath();
         state = ZombieState.Idle;
         yield return null;
+    }
+
+    public void AddScore()
+    {
+        OnScoreChange.Raise(this, score);
     }
 }
 enum ZombieState

@@ -957,6 +957,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+  score: 10
+  OnScoreChange: {fileID: 11400000, guid: cf5cbcb93efb4534b8960755ae4a1378, type: 2}
 --- !u!135 &2967437523881981702
 SphereCollider:
   m_ObjectHideFlags: 0

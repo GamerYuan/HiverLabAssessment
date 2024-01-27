@@ -15,6 +15,6 @@ public class ZombieHealth : MonoBehaviour, IHealth
     public void TakeDamage(float damage)
     {
         Health -= damage;
-        Debug.Log($"{transform} took {damage} + damage!");
+        Debug.Log($"{transform} took {damage} damage!");
     }
 }

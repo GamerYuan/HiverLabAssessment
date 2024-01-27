@@ -57,7 +57,7 @@ public class PlayerShoot : MonoBehaviour
         if (Physics.Raycast(bulletPoint, bulletSpawn.transform.forward, out hit, 30, Physics.DefaultRaycastLayers, 
             QueryTriggerInteraction.Ignore))
         {
-            Debug.Log(hit.collider.gameObject);
+            Debug.Log($"Player bullet hit {hit.collider.gameObject}");
             
             // Checks for zombie
             if (hit.transform.root.CompareTag("Zombie"))
@@ -70,7 +70,6 @@ public class PlayerShoot : MonoBehaviour
 
     public void Shoot(InputAction.CallbackContext context)
     {
-        Debug.Log("Test");
         isShooting = context.action.IsPressed();
     }
 }

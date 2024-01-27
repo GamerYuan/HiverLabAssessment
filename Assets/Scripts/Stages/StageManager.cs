@@ -12,7 +12,7 @@ public class StageManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-        } 
+        }
         else
         {
             Destroy(this);
@@ -29,4 +29,5 @@ public class StageManager : MonoBehaviour
     {
         EndStage();
     }
+
 }
