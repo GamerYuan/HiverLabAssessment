@@ -10,6 +10,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private float maxSpread, timeoutPeriod, shootInterval;
     [SerializeField] private LayerMask zombieLayer;
+    [SerializeField] private GameEvent onBulletSpread;
 
     private ObjectPool<GameObject> bulletPool;
     private float spreadTimer = 0f, spread = 0f, shootTimer;
@@ -23,8 +24,12 @@ public class PlayerShoot : MonoBehaviour
 
     void Update()
     {
-        spreadTimer = Mathf.Clamp(spreadTimer - Time.deltaTime, 0f, timeoutPeriod);
-        spread = maxSpread * (spreadTimer / timeoutPeriod);
+        if (spreadTimer > 0)
+        {
+            spreadTimer = Mathf.Clamp(spreadTimer - Time.deltaTime, 0f, timeoutPeriod);
+            spread = maxSpread * (spreadTimer / timeoutPeriod);
+            onBulletSpread.Raise(this, spread);
+        }
 
         if (canShoot && isShooting)
         {
@@ -46,9 +51,7 @@ public class PlayerShoot : MonoBehaviour
     void TriggerBullet()
     {
         spreadTimer = Mathf.Clamp(spreadTimer + 0.2f, 0f, timeoutPeriod);
-
-        spread = maxSpread * (spreadTimer / timeoutPeriod);
-
+        
         Vector2 randPoint = Random.insideUnitCircle * spread;
 
         // Clamp bullet spread to top half of the circle
