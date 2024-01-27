@@ -146,12 +146,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 8f7380da49034cd488ddff94b1ac35d1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.36
+      value: -0.63
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8f7380da49034cd488ddff94b1ac35d1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 74.1
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8f7380da49034cd488ddff94b1ac35d1,
         type: 3}
@@ -911,7 +911,7 @@ NavMeshAgent:
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -944,15 +944,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd243f0f3fab44341a7d5e26f7eb789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 2.5
+  walkSpeed: 1
   runSpeed: 5
   aggroRange: 15
   attackRange: 2
+  hitboxRange: 0.75
   attackDamage: 5
-  attackInterval: 3
+  attackInterval: 2
   minWalkInterval: 5
   maxWalkInterval: 10
-  walkRange: 5
+  walkRange: 10
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!135 &2967437523881981702
 SphereCollider:
   m_ObjectHideFlags: 0

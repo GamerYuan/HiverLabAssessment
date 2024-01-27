@@ -8,6 +8,7 @@ public class ZombieBehaviour : MonoBehaviour
 {
     [SerializeField] private float walkSpeed, runSpeed, aggroRange, attackRange, hitboxRange,
         attackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
+    [SerializeField] private LayerMask playerLayer;
     
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
@@ -21,6 +22,7 @@ public class ZombieBehaviour : MonoBehaviour
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         zombieHealth = GetComponent<ZombieHealth>();
+        agent.speed = walkSpeed;
     }
 
     // Start is called before the first frame update
@@ -101,6 +103,10 @@ public class ZombieBehaviour : MonoBehaviour
         anim.SetBool("isWalking", true);
         anim.SetBool("isRunning", false);
         anim.SetBool("isIdle", false);
+        if (agent.remainingDistance < 1)
+        {
+            state = ZombieState.Idle;
+        }
         //Debug.Log("Walk");
     }
 
@@ -155,15 +161,22 @@ public class ZombieBehaviour : MonoBehaviour
         anim.SetBool("isRunning", false);
         anim.SetBool("isIdle", false);
         anim.SetTrigger("Attack");
+        agent.ResetPath();
         StartCoroutine(AttackCooldown());
     }
 
     public void AttackHitbox()
     {
-        Physics.SphereCast(transform.position, hitboxRange, transform.forward, out RaycastHit hit);
-        if (hit.transform.root.CompareTag("Player"))
+        Debug.Log("Attack");
+        RaycastHit hit;
+        if (Physics.SphereCast(transform.position, hitboxRange, transform.forward, out hit, 1, 
+            playerLayer, QueryTriggerInteraction.Ignore))
         {
-            PlayerBehaviour.instance.TakeDamage(attackDamage);
+            Debug.Log(hit.transform);
+            if (hit.transform.root.CompareTag("Player"))
+            {
+                PlayerBehaviour.instance.TakeDamage(attackDamage);
+            }
         }
     }
 
@@ -212,6 +225,7 @@ public class ZombieBehaviour : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
             if (state == ZombieState.Idle)
             {
+                Debug.Log("Starts new coroutine");
                 StopCoroutine(coroutine);
                 coroutine = StartCoroutine(RandomWalk());
             }
@@ -222,9 +236,11 @@ public class ZombieBehaviour : MonoBehaviour
     {
         state = ZombieState.Walk;
         anim.SetFloat("Random", Random.Range(0f, 1f));
-        Vector3 randVec = new Vector3(transform.position.x + Random.Range(-10, 10), 0, transform.position.z + Random.Range(-10, 10));
+        Vector2 randPoint = Random.insideUnitCircle * walkRange;
+        Vector3 randVec = new Vector3(transform.position.x + randPoint.x, 0, transform.position.z + randPoint.y);
         agent.SetDestination(randVec);
         yield return new WaitForSeconds(Random.Range(minWalkInterval, maxWalkInterval));
+        Debug.Log("Reset Path");
         agent.ResetPath();
         state = ZombieState.Idle;
         yield return null;

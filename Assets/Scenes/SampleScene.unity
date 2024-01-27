@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 331878848}
   - component: {fileID: 331878847}
   - component: {fileID: 331878850}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -753,7 +753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 893896058}
   - component: {fileID: 893896059}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -904,7 +904,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1158304113}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1073,7 +1073,7 @@ GameObject:
   - component: {fileID: 1708332339}
   - component: {fileID: 1708332341}
   - component: {fileID: 1708332340}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1269,7 +1269,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1294,8 +1294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5ead30a21f069468ebb99f4de14429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpawn: {fileID: 893896058}
-  maxSpread: 0.2
+  bulletSpawn: {fileID: 1158304113}
+  maxSpread: 0.1
   timeoutPeriod: 1
   shootInterval: 0.1
   damage: 5
@@ -1338,7 +1338,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1836433836}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1493,10 +1493,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4633046380800690959, guid: 5da467cc775a8ec49b9c1361a54b640b,
+    - target: {fileID: -6931301855204352629, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
-      propertyPath: _health
-      value: 10000000
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6931301855204352629, guid: 5da467cc775a8ec49b9c1361a54b640b,
+        type: 3}
+      propertyPath: hitboxRange
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -6931301855204352629, guid: 5da467cc775a8ec49b9c1361a54b640b,
+        type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4028769735225257901, guid: 5da467cc775a8ec49b9c1361a54b640b,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5158661590492420577, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
@@ -1511,12 +1526,12 @@ PrefabInstance:
     - target: {fileID: 8200041972435938290, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.36
+      value: -0.63
       objectReference: {fileID: 0}
     - target: {fileID: 8200041972435938290, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 74.1
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 8200041972435938290, guid: 5da467cc775a8ec49b9c1361a54b640b,
         type: 3}
