@@ -9,12 +9,13 @@ public class EnemySpawnManager : MonoBehaviour
     public static EnemySpawnManager instance;
 
     [SerializeField] private List<GameObject> enemyPrefabs;
-    [SerializeField] private float minSpawnInterval, maxSpawnInterval, spawnRadius, minPlayerDist;
+    [SerializeField] private float minSpawnInterval, maxSpawnInterval, spawnRadius, minPlayerDist, maxDifficulty;
     [SerializeField] private int maxEnemyCount;
 
     private ObjectPool<GameObject> enemyPool;
     private Transform playerPos;
     private int count = 1;
+    private float baseDifficulty = 1, difficulty = 1;
     
     // Start is called before the first frame update
     void Awake()
@@ -63,7 +64,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         
         obj.transform.position = spawnPoint.position;
-        obj.GetComponent<ZombieBehaviour>().Init(1, playerPos);
+        obj.GetComponent<ZombieBehaviour>().Init(difficulty, playerPos);
 
         Debug.Log($"Spawning enemy {obj.GetInstanceID()} at {spawnPoint.position}");
     }
@@ -76,6 +77,11 @@ public class EnemySpawnManager : MonoBehaviour
     public void ReleaseObject(GameObject obj)
     {
         enemyPool.Release(obj);
+    }
+
+    public void IncreaseDifficulty(float difficultyModifier)
+    {
+        difficulty = baseDifficulty + maxDifficulty * difficultyModifier;
     }
 
     private IEnumerator SpawnEnemy()

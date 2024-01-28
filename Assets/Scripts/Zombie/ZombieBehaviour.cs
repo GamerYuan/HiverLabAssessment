@@ -77,7 +77,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         isInSuspiciousRange = false;
     }
 
-    public void Init(int diffMultiplier, Transform player)
+    public void Init(float diffMultiplier, Transform player)
     {
         this.player = player;
         state = ZombieState.Idle;
@@ -85,7 +85,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         agent.enabled = true;
         zombieHealth.ResetHealth(diffMultiplier);
         attackDamage = initialAttackDamage * diffMultiplier;
-        score = initialScore * diffMultiplier;
+        score = Mathf.CeilToInt(initialScore * diffMultiplier);
         gameObject.SetActive(true);
     }
 

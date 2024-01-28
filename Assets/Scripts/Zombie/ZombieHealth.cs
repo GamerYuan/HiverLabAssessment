@@ -20,7 +20,7 @@ public class ZombieHealth : MonoBehaviour, IHealth
         Debug.Log($"{transform} took {damage} damage!");
     }
 
-    public void ResetHealth(int diffMultiplier)
+    public void ResetHealth(float diffMultiplier)
     {
         Health = initialHealth * diffMultiplier;
     }
