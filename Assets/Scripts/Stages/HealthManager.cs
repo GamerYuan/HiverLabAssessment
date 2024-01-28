@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private Image healthBar;
+    private float initialWidth;
 
-    private float currHealth = 0;
-
-    public void Start()
+    void Awake()
     {
-        healthText.text = $"Health: {currHealth}";
+        initialWidth = healthBar.rectTransform.sizeDelta.x;    
     }
 
     public void OnHealthChange(Component sender, object data)
@@ -21,7 +21,7 @@ public class HealthManager : MonoBehaviour
             Debug.LogError("Sender is not IHealth");
             return;
         }
-        currHealth = (float)data;
-        healthText.text = $"Health: {currHealth}";
+        float health = Mathf.Clamp((float)data, 0f, 1f);
+        healthBar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, initialWidth * health);
     }
 }

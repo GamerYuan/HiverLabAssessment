@@ -24,13 +24,13 @@ public class PlayerHealth : MonoBehaviour, IHealth
     {
         Health -= damage;
         Debug.Log("Player took " + damage + " damage!");
-        onHealthChanged.Raise(this, Health);
+        onHealthChanged.Raise(this, Health / initialHealth);
     }
 
     public void Heal(float healAmount)
     {
         Health = Mathf.Min(Health + healAmount, initialHealth);
         Debug.Log($"Player healed {healAmount} health!");
-        onHealthChanged.Raise(this, Health);
+        onHealthChanged.Raise(this, Health / initialHealth);
     }
 }

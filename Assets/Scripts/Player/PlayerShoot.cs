@@ -7,7 +7,7 @@ using UnityEngine.Pool;
 public class PlayerShoot : MonoBehaviour
 {
     [SerializeField] private Transform bulletSpawn;
-    [SerializeField] private float maxSpread, timeoutPeriod, shootInterval, damage;
+    [SerializeField] private float maxSpread, timeoutPeriod, shootInterval, damage, range;
     [SerializeField] private LayerMask zombieLayer;
     [SerializeField] private GameEvent onBulletSpread;
 
@@ -52,9 +52,9 @@ public class PlayerShoot : MonoBehaviour
             bulletSpawn.position.y + Mathf.Clamp(randPoint.y, 0, 1), bulletSpawn.position.z);
 
         RaycastHit hit;
-        Debug.DrawRay(bulletPoint, bulletSpawn.transform.forward * 30, Color.black, 5);
+        Debug.DrawRay(bulletPoint, bulletSpawn.transform.forward * range, Color.black, 5);
         // If raycast hits something
-        if (Physics.Raycast(bulletPoint, bulletSpawn.transform.forward, out hit, 30, Physics.DefaultRaycastLayers, 
+        if (Physics.Raycast(bulletPoint, bulletSpawn.transform.forward, out hit, range, Physics.DefaultRaycastLayers, 
             QueryTriggerInteraction.Ignore))
         {
             Debug.Log($"Player bullet hit {hit.collider.gameObject}");
