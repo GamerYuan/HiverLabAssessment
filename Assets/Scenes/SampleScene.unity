@@ -1758,7 +1758,7 @@ MonoBehaviour:
   spawnRadius: 100
   minPlayerDist: 0.4
   maxDifficulty: 15
-  maxEnemyCount: 100
+  maxEnemyCount: 30
 --- !u!1 &2003509240
 GameObject:
   m_ObjectHideFlags: 0

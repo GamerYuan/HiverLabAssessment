@@ -14,7 +14,6 @@ public class EnemySpawnManager : MonoBehaviour
 
     private ObjectPool<GameObject> enemyPool;
     private Transform playerPos;
-    private int count = 1;
     private float baseDifficulty = 1, difficulty = 1;
     
     // Start is called before the first frame update
@@ -34,21 +33,14 @@ public class EnemySpawnManager : MonoBehaviour
         StartCoroutine(SpawnEnemy());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTakeFromPool(GameObject obj)
     {
-        Vector2 randPoint = Vector2.zero;
         NavMeshHit spawnPoint;
 
         // Generate random point that is far enough from the centre
         while (true)
         {
-            randPoint = Random.insideUnitCircle;
+            Vector2 randPoint = Random.insideUnitCircle;
             if (Vector2.Distance(randPoint, Vector2.zero) < minPlayerDist)
                 continue;
             randPoint *= spawnRadius;
@@ -90,7 +82,7 @@ public class EnemySpawnManager : MonoBehaviour
         {
             if (playerPos == null) playerPos = GameObject.FindGameObjectWithTag("Player").transform;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < difficulty; i++)
             {
                 if (enemyPool.CountActive >= maxEnemyCount)
                 {
@@ -104,7 +96,6 @@ public class EnemySpawnManager : MonoBehaviour
 
             // Reduce max spawn time of subsequent spawns
             maxSpawnInterval *= 0.98f;
-            count++;
         }
         yield return null;
     }
