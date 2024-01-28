@@ -56,7 +56,7 @@ public class StageManager : MonoBehaviour
             if (Mathf.Floor(stageTimer - i - rampTimer) > currRamp)
             {
                 currRamp++;
-                EnemySpawnManager.instance.IncreaseDifficulty(currRamp * rampTimer / stageTimer);
+                DifficultyManager.IncreaseDifficulty(currRamp * rampTimer / stageTimer);
             }
             yield return timer;
         }

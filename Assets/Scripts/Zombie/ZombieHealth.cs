@@ -24,4 +24,9 @@ public class ZombieHealth : MonoBehaviour, IHealth
     {
         Health = initialHealth * diffMultiplier;
     }
+
+    public void Heal(float healAmount)
+    {
+        Debug.LogError("Zombies can't heal!");
+    }   
 }

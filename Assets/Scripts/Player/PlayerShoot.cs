@@ -72,4 +72,10 @@ public class PlayerShoot : MonoBehaviour
     {
         isShooting = context.action.IsPressed();
     }
+
+    public void PowerUp(float val)
+    {
+        damage *= val;
+        Debug.Log($"Player damage increased! Current damage: {damage}");
+    }
 }
