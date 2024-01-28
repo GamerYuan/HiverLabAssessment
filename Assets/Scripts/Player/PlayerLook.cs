@@ -12,11 +12,6 @@ public class PlayerLook : MonoBehaviour
 
     private float xRot, yRot;
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
     void Update()
     {
         ApplyLook();

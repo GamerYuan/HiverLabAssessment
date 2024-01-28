@@ -1,20 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text scoreText;
-    
+    public static ScoreManager instance;
+
+    [SerializeField] private GameEvent OnScoreChange;
+
     private int score = 0;
 
-    void Start()
-    {
-        scoreText.text = $"Score: {score}";
+    private int Score 
+    { get => score; set
+        {
+            score = Mathf.Max(value, 0);
+            OnScoreChange.Raise(this, score);
+            Debug.Log("Score changed");
+        }
     }
 
-    public void OnScoreChange(Component sender, object data)
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+        DontDestroyOnLoad(this);
+    }
+
+    public void OnScoreAdd(Component sender, object data)
     {
         if (sender is not IScorable)
         {
@@ -22,8 +40,17 @@ public class ScoreManager : MonoBehaviour
             return;
         }
         int scoreToAdd = (int)data;
-        score = Mathf.Max(score + scoreToAdd, 0);
-        Debug.Log("Score changed");
-        scoreText.text = $"Score: {score}";
+        Score += scoreToAdd;
     }
+
+    public void ResetScore()
+    {
+        Score = 0;
+    }
+
+    public int GetScore()
+    {
+        return Score;
+    }
+
 }

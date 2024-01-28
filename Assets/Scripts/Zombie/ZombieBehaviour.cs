@@ -10,7 +10,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         initialAttackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private int initialScore;
-    [SerializeField] private GameEvent OnScoreChange;
+    [SerializeField] private GameEvent OnScoreAdd;
 
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
@@ -272,7 +272,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
 
     public void AddScore()
     {
-        OnScoreChange.Raise(this, score);
+        OnScoreAdd.Raise(this, score);
     }
 }
 enum ZombieState

@@ -958,7 +958,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   initialScore: 10
-  OnScoreChange: {fileID: 11400000, guid: cf5cbcb93efb4534b8960755ae4a1378, type: 2}
+  OnScoreAdd: {fileID: 11400000, guid: bf90287e46de211409518814b2b36603, type: 2}
 --- !u!135 &2967437523881981702
 SphereCollider:
   m_ObjectHideFlags: 0

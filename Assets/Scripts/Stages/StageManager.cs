@@ -28,19 +28,23 @@ public class StageManager : MonoBehaviour
             Destroy(this);
         }
         isStageActive = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Start()
     {
         rampTimer = (float)stageTimer / rampStages;
         StartCoroutine(StageTimer());
+        ScoreManager.instance.ResetScore();
     }
 
     private void EndStage()
     {
         Debug.Log("Ending stage");
+        Cursor.lockState = CursorLockMode.None;
         isStageActive = false;
         Time.timeScale = 0f;
+        TransitionManager.instance.GoToLevel("EndMenu");
     }
 
     public void OnPlayerDie(Component sender, object data)
