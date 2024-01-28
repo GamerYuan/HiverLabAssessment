@@ -20,11 +20,6 @@ public class EnemySpawnManager : SpawnManager
         base.Awake();
     }
 
-    void Start()
-    {
-        StartCoroutine(SpawnObj());
-    }
-
     protected override void OnTakeFromPool(GameObject obj)
     {
         base.OnTakeFromPool(obj);

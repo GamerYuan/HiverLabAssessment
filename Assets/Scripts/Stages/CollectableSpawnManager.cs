@@ -21,20 +21,12 @@ public class CollectableSpawnManager : SpawnManager
         base.Awake();
     }
 
-    void Start()
-    {
-        StartCoroutine(SpawnObj());
-    }
-
     protected override void OnTakeFromPool(GameObject obj)
     {
-        Vector3 spawnPoint = GenerateSpawnPoint();
-        obj.transform.position = spawnPoint;
+        base.OnTakeFromPool(obj);
         obj.transform.Translate(0, -0.1f, 0);
         obj.transform.Rotate(Vector3.up, Random.Range(0, 360));
         obj.GetComponent<ICollectable>().Init(DifficultyManager.Difficulty);
-
-        Debug.Log($"Spawning {obj.transform} {obj.GetInstanceID()} at {spawnPoint}");
     }
 
     protected override IEnumerator SpawnObj()

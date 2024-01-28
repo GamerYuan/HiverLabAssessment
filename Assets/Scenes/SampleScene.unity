@@ -1909,6 +1909,8 @@ MonoBehaviour:
   maxSpawnInterval: 5
   spawnRadius: 100
   minPlayerDist: 0.4
+  despawnInterval: 10
+  despawnDistance: 120
   maxObjCount: 30
 --- !u!114 &1991992843
 MonoBehaviour:
@@ -1927,8 +1929,10 @@ MonoBehaviour:
   - {fileID: 3174676410148062195, guid: 12654ecb692f2ed4a8d1a12653d1a244, type: 3}
   minSpawnInterval: 1
   maxSpawnInterval: 5
-  spawnRadius: 50
+  spawnRadius: 40
   minPlayerDist: 0.25
+  despawnInterval: 5
+  despawnDistance: 50
   maxObjCount: 10
   terrain: {fileID: 331878848}
 --- !u!114 &1991992844
