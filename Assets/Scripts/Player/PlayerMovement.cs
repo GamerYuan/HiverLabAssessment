@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ApplyMove()
     {
+        move = head.right * input.x + head.forward * input.y;
         controller.Move(move * Time.deltaTime * moveSpeed);
     }
 
@@ -50,7 +51,6 @@ public class PlayerMovement : MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>();
-        move = head.right * input.x + head.forward * input.y;
     }
 
     public void Jump(InputAction.CallbackContext context)
