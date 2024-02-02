@@ -25,7 +25,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        playerHealth.TakeDamage(damage);
+        playerHealth.Damage(damage);
         if (playerHealth.Health <= 0)
         {
             onPlayerDie.Raise(this, "Player Dead");

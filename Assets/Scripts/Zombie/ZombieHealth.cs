@@ -14,10 +14,10 @@ public class ZombieHealth : MonoBehaviour, IHealth
         private set => _health = value;
     }
 
-    public void TakeDamage(float damage)
+    public void Damage(float damage)
     {
         Health -= damage;
-        Debug.Log($"{transform} took {damage} damage!");
+        Debug.Log($"{transform.GetInstanceID()}: Took {damage} damage!");
     }
 
     public void ResetHealth(float diffMultiplier)

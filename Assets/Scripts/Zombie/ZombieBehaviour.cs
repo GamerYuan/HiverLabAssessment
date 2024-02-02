@@ -11,12 +11,14 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private int initialScore;
     [SerializeField] private GameEvent OnScoreAdd;
+    [SerializeField] private AudioSource zombieAttack, bloodSplatter;
 
     private Animator anim;
     private ZombieState state = ZombieState.Idle;
     private NavMeshAgent agent;
     private Transform player;
     private ZombieHealth zombieHealth;
+    private ZombieBlood zombieBlood;
     private bool isWalking = false, isInSuspiciousRange = false;
     private float attackDamage;
     private int score;
@@ -26,6 +28,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         zombieHealth = GetComponent<ZombieHealth>();
+        zombieBlood = GetComponent<ZombieBlood>();
         agent.speed = walkSpeed;
     }
 
@@ -164,6 +167,7 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         {
             state = ZombieState.Suspicious;
         }
+        if (!zombieAttack.isPlaying) zombieAttack.Play();
     }
 
     private void Attack()
@@ -207,7 +211,9 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
             agent.SetDestination(player.position);
         }
 
-        zombieHealth.TakeDamage(damage);
+        zombieBlood.PlayParticle();
+        if (!bloodSplatter.isPlaying) bloodSplatter.Play();
+        zombieHealth.Damage(damage);
         if (zombieHealth.Health <= 0)
         {
             Dead();

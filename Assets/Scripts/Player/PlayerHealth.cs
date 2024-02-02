@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour, IHealth
         onHealthChanged.Raise(this, Health);
     }
 
-    public void TakeDamage(float damage)
+    public void Damage(float damage)
     {
         Health -= damage;
         Debug.Log("Player took " + damage + " damage!");

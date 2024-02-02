@@ -10,6 +10,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private float maxSpread, timeoutPeriod, shootInterval, damage, range;
     [SerializeField] private LayerMask zombieLayer;
     [SerializeField] private GameEvent onBulletSpread;
+    [SerializeField] private AudioSource bulletSFX;
 
     private float spreadTimer = 0f, spread = 0f, shootTimer;
     private bool isShooting = false;
@@ -51,6 +52,8 @@ public class PlayerShoot : MonoBehaviour
         Vector3 bulletPoint = new Vector3(bulletSpawn.position.x + randPoint.x,
             bulletSpawn.position.y + Mathf.Clamp(randPoint.y, 0, 1), bulletSpawn.position.z);
 
+        bulletSFX.Play();
+
         RaycastHit hit;
         Debug.DrawRay(bulletPoint, bulletSpawn.transform.forward * range, Color.black, 5);
         // If raycast hits something
@@ -58,7 +61,7 @@ public class PlayerShoot : MonoBehaviour
             QueryTriggerInteraction.Ignore))
         {
             Debug.Log($"Zombie {hit.transform.GetInstanceID()}: Got hit");
-            hit.transform.root.GetComponent<ZombieBehaviour>().TakeDamage(damage);
+            hit.transform.SendMessage("TakeDamage", damage);
         }
     }
 
