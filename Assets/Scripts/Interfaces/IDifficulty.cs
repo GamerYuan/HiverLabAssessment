@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICollectable
+public interface IDifficulty
 {
-    void DoAction(Component sender);
+    void SetDiff(float difficultyModifier);
 }

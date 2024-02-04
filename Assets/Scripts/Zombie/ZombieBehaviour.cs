@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ZombieBehaviour : MonoBehaviour, IScorable
+public class ZombieBehaviour : MonoBehaviour, IScorable, ISpawnable, IDifficulty
 {
     [SerializeField] private float walkSpeed, runSpeed, aggroRange, attackRange, hitboxRange,
         initialAttackDamage, attackInterval, minWalkInterval, maxWalkInterval, walkRange;
@@ -80,16 +80,26 @@ public class ZombieBehaviour : MonoBehaviour, IScorable
         isInSuspiciousRange = false;
     }
 
-    public void Init(float diffMultiplier, Transform player)
+    public void Init(Vector3 spawnPosition)
+    {
+        state = ZombieState.Idle;
+
+        agent.Warp(spawnPosition);
+
+        agent.enabled = true;
+        gameObject.SetActive(true);
+    }
+
+    public void SetPlayer(Transform player)
     {
         this.player = player;
-        state = ZombieState.Idle;
-        
-        agent.enabled = true;
+    }
+
+    public void SetDiff(float diffMultiplier)
+    {
         zombieHealth.ResetHealth(diffMultiplier);
         attackDamage = initialAttackDamage * diffMultiplier;
         score = Mathf.CeilToInt(initialScore * diffMultiplier);
-        gameObject.SetActive(true);
     }
 
     private IEnumerator CheckAggro()

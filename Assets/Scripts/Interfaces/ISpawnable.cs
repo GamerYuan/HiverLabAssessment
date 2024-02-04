@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICollectable
+public interface ISpawnable
 {
-    void DoAction(Component sender);
+    void Init(Vector3 spawnPosition);
 }

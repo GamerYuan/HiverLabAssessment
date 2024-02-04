@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 6894979521318456901}
   - component: {fileID: 1870679391148259636}
   - component: {fileID: -2226998554092429242}
+  - component: {fileID: -7315268672573310653}
   m_Layer: 0
   m_Name: PT_Pine_Tree_03_green
   m_TagString: Untagged
@@ -252,6 +253,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 5.169208, z: 1}
   m_Center: {x: 0, y: 2.084604, z: 0}
+--- !u!208 &-7315268672573310653
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6117071349010126079}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 2.6, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 2.1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &8169898343365794049
 GameObject:
   m_ObjectHideFlags: 0

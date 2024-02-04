@@ -26,7 +26,7 @@ public class CollectableSpawnManager : SpawnManager
         base.OnTakeFromPool(obj);
         obj.transform.Translate(0, -0.1f, 0);
         obj.transform.Rotate(Vector3.up, Random.Range(0, 360));
-        obj.GetComponent<ICollectable>().Init(DifficultyManager.Difficulty);
+        obj.GetComponent<IDifficulty>().SetDiff(DifficultyManager.Difficulty);
     }
 
     protected override IEnumerator SpawnObj()

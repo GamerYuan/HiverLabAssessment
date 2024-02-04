@@ -63,7 +63,7 @@ public class PlayerShoot : MonoBehaviour
             if (hit.transform.root.CompareTag("Zombie"))
             {
                 Debug.Log($"Zombie {hit.transform.GetInstanceID()}: Got hit");
-                hit.transform.SendMessage("TakeDamage", damage);
+                hit.transform.root.SendMessage("TakeDamage", damage);
             }
         }
     }

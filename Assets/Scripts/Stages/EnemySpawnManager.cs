@@ -23,7 +23,9 @@ public class EnemySpawnManager : SpawnManager
     protected override void OnTakeFromPool(GameObject obj)
     {
         base.OnTakeFromPool(obj);
-        obj.GetComponent<ZombieBehaviour>().Init(DifficultyManager.Difficulty, playerPos);
+        ZombieBehaviour zb = obj.GetComponent<ZombieBehaviour>();
+        zb.SetDiff(DifficultyManager.Difficulty);
+        zb.SetPlayer(playerPos);
     }
 
     protected override IEnumerator SpawnObj()

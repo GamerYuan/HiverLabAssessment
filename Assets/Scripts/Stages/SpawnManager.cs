@@ -33,7 +33,7 @@ public class SpawnManager : MonoBehaviour
     protected virtual void OnTakeFromPool(GameObject obj)
     {
         Vector3 spawnPoint = GenerateSpawnPoint();
-        obj.transform.position = spawnPoint;
+        obj.GetComponent<ISpawnable>().Init(spawnPoint);
         Debug.Log($"Spawning {obj.transform} {obj.GetInstanceID()} at {spawnPoint}");
         activeObjList.Add(obj);
     }
