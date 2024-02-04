@@ -8,7 +8,7 @@ Backend Repository: https://github.com/GamerYuan/HiverLabAssessmentBackend
 
 - `WASD` to move
 - `Space` to jump
-- `Left Click` to 
+- `Left Click` to shoot
 - `Mouse` to look around
 
 ## Gameplay
