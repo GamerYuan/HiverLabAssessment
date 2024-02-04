@@ -57,11 +57,14 @@ public class PlayerShoot : MonoBehaviour
         RaycastHit hit;
         Debug.DrawRay(bulletPoint, bulletSpawn.transform.forward * range, Color.black, 5);
         // If raycast hits something
-        if (Physics.Raycast(bulletPoint, bulletSpawn.transform.forward, out hit, range, zombieLayer, 
+        if (Physics.Raycast(bulletPoint, bulletSpawn.transform.forward, out hit, range, Physics.DefaultRaycastLayers, 
             QueryTriggerInteraction.Ignore))
         {
-            Debug.Log($"Zombie {hit.transform.GetInstanceID()}: Got hit");
-            hit.transform.SendMessage("TakeDamage", damage);
+            if (hit.transform.root.CompareTag("Zombie"))
+            {
+                Debug.Log($"Zombie {hit.transform.GetInstanceID()}: Got hit");
+                hit.transform.SendMessage("TakeDamage", damage);
+            }
         }
     }
 
