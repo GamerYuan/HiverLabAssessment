@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ca804918ff1a5438ed05754c893413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpAmount: 1.2
+  powerUpAmount: 1.1
 --- !u!65 &5867823151119313763
 BoxCollider:
   m_ObjectHideFlags: 0
