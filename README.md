@@ -1,6 +1,7 @@
 ## README
 
 Unity Repository: https://github.com/GamerYuan/HiverLabAssessment
+
 Backend Repository: https://github.com/GamerYuan/HiverLabAssessmentBackend
 
 ## Controls
@@ -37,6 +38,24 @@ Backend Repository: https://github.com/GamerYuan/HiverLabAssessmentBackend
 - The game ends when the player's HP reaches 0.
 
 ## Features
+
+### Zombie AI
+
+- The Zombie AI is created with a Finite State Machine, with the following states:
+	- `Idle`: The zombie is not aware of the player's presence and is standing still.
+	- `Walk`: The zombie is not aware of the player's presence and is moving randomly.
+	- `Suspicious`: The zombie is aware of the player's presence and is moving towards the player's last known position.
+	- `Aggro`: The zombie is in close approximity to the player and is chasing the player.
+	- `Attack`: The zombie is in close approximity to the player and is attacking the player.
+	- `Dead`: The zombie is dead and is waiting to be returned to the Object Pool.
+- Pathfinding is done with Unity's NavMesh system.
+
+### Shooting
+
+- Shooting is simulated with a raycast.
+- The raycast is shot from the player's position and in the direction of the camera's forward vector.
+- The raycast hits the first object it collides with and checks if it is a zombie.
+- Continuous shooting introduces bullet spread.
 
 ### Leaderboard
 
